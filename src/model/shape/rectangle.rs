@@ -24,4 +24,3 @@ impl Rectangle {
         self.height
     }
 }
-

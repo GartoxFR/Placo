@@ -50,7 +50,11 @@ impl Program<Message> for Add<'_> {
     ) -> Vec<<iced::Renderer<iced::Theme> as iced::widget::canvas::Renderer>::Geometry> {
         let mut frame = Frame::new(renderer, bounds.size());
 
-        view::plan::draw_shapes(&mut frame, self.controller.plan().iter(), self.controller.scale());
+        view::plan::draw_shapes(
+            &mut frame,
+            self.controller.plan().iter(),
+            self.controller.scale(),
+        );
 
         if let State::Sizing { shape, .. } = state {
             let path = view::plan::draw_shape(shape, self.controller.scale());
@@ -81,10 +85,13 @@ impl Program<Message> for Add<'_> {
                     };
 
                 let world_cursor_pos = screen_to_world(screen_cursor_pos, self.controller.scale());
-                *state = State::Sizing {
-                    shape: generate_shape(self.shape_type, world_cursor_pos, world_cursor_pos),
-                    first_point: world_cursor_pos,
-                };
+                let shape = generate_shape(self.shape_type, world_cursor_pos, world_cursor_pos);
+                if self.controller.plan().is_disjoint(&shape, None) {
+                    *state = State::Sizing {
+                        shape,
+                        first_point: world_cursor_pos,
+                    };
+                }
 
                 (Status::Captured, None)
             }
@@ -101,7 +108,11 @@ impl Program<Message> for Add<'_> {
                     let relative_pos = Point::ORIGIN + (absolute_pos - bounds.position());
                     let second_point = screen_to_world(relative_pos, self.controller.scale());
 
-                    *shape = generate_shape(self.shape_type, *first_point, second_point);
+                    let new_shape = generate_shape(self.shape_type, *first_point, second_point);
+                    if self.controller.plan().is_disjoint(&new_shape, None) {
+                        *shape = new_shape
+                    }
+
                     (Status::Captured, None)
                 } else {
                     (Status::Ignored, None)
