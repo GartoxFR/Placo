@@ -23,4 +23,15 @@ impl Rectangle {
     pub fn height(&self) -> u32 {
         self.height
     }
+
+    pub fn move_to(&mut self, to: Vec2) {
+        self.pos = to;
+    }
+
+    pub fn contains(&self, point: &Vec2) -> bool {
+        point.x >= self.pos.x
+            && point.x <= self.pos.x + self.width as i32
+            && point.y >= self.pos.y
+            && point.y <= self.pos.y + self.height as i32
+    }
 }

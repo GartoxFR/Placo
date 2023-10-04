@@ -12,9 +12,10 @@ mod plan;
 const SPACING: u16 = 5;
 const PADDING: u16 = 10;
 
-const BUTTONS: [(&str, MessageResolver); 6] = [
+const BUTTONS: [(&str, MessageResolver); 7] = [
     ("Add rectangle", message_if!(Message::AddRectangleButton, Controller::idle)),
     ("Add circle", message_if!(Message::AddCircleButton, Controller::idle)),
+    ("Move", message_if!(Message::MoveButton, Controller::idle)),
     ("Scale up", message_if!(Message::ScaleUp, Controller::idle)),
     ("Scale down", message_if!(Message::ScaleDown, Controller::idle)),
     ("Undo", message_if!(Message::Undo, Controller::can_undo)),

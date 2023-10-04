@@ -31,7 +31,8 @@ pub fn plan_view(controller: &Controller) -> Element {
     canvas_select_program_and_format! {
         controller.state() => {
             ControllerState::Idle => program::Idle::new(controller),
-            ControllerState::AddingShape(shape_type) => program::Add::new(controller, *shape_type)
+            ControllerState::AddingShape(shape_type) => program::Add::new(controller, *shape_type),
+            ControllerState::MovingShapes => program::Move::new(controller)
         }
         format_canvas
     }

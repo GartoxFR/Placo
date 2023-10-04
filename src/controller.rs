@@ -37,6 +37,9 @@ impl Controller {
             (ControllerState::Idle, Message::AddCircleButton) => {
                 self.state = ControllerState::AddingShape(ShapeType::Circle)
             }
+            (ControllerState::Idle, Message::MoveButton) => {
+                self.state = ControllerState::MovingShapes
+            }
             (ControllerState::Idle, Message::Undo) => self.undo(),
             (ControllerState::Idle, Message::Redo) => self.redo(),
             (_, Message::ScaleUp) => self.scale += 5.0,
@@ -50,6 +53,11 @@ impl Controller {
                 self.do_command(command::add_shape(id, shape));
                 self.state = ControllerState::Idle;
             }
+            (_, Message::UpdateShape(shape_id, shape)) => {
+                if let Some(old) = self.plan.get_shape(shape_id) {
+                    self.do_command(command::update_shape(shape_id, old.clone(), shape));
+                }
+            },
             _ => {}
         }
     }

@@ -4,6 +4,8 @@ pub use rectangle::*;
 pub mod circle;
 pub use circle::*;
 
+use super::vec2::Vec2;
+
 #[derive(Debug, Clone)]
 pub enum Shape {
     Circle(Circle),
@@ -11,6 +13,20 @@ pub enum Shape {
 }
 
 impl Shape {
+    pub fn move_to(&mut self, to: Vec2) {
+        match self {
+            Shape::Circle(circle) => circle.move_to(to),
+            Shape::Rectangle(rect) => rect.move_to(to),
+        }
+    }
+
+    pub fn contains(&self, point: &Vec2) -> bool {
+        match self {
+            Shape::Circle(circle) => circle.contains(point),
+            Shape::Rectangle(rect) => rect.contains(point),
+        }
+    }
+
     pub fn is_disjoint(&self, other: &Shape) -> bool {
         match (self, other) {
             (Shape::Circle(circle1), Shape::Circle(circle2)) => {
@@ -63,6 +79,7 @@ impl Shape {
 
         circle.pos().distance(&nearest_point) >= circle.radius()
     }
+
 }
 
 impl From<Rectangle> for Shape {

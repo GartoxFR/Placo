@@ -2,7 +2,8 @@
 pub enum ControllerState {
     #[default]
     Idle,
-    AddingShape(ShapeType)
+    AddingShape(ShapeType),
+    MovingShapes,
 }
 
 #[derive(Debug, Clone, Copy)]

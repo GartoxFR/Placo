@@ -18,5 +18,13 @@ impl Circle {
     pub fn radius(&self) -> u32 {
         self.radius
     }
+
+    pub fn move_to(&mut self, to: Vec2) {
+        self.pos = to;
+    }
+
+    pub fn contains(&self, point: &Vec2) -> bool {
+        point.distance(&self.pos) <= self.radius() 
+    }
 }
 
